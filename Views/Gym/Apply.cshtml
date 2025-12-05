@@ -1,0 +1,124 @@
+@model Employee
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                
+                <div class="card-header bg-success text-white p-4 rounded-top-3">
+                    <h2 class="h4 mb-1"><i class="bi bi-person-lines-fill me-2"></i>Gym Başvuru Formu</h2>
+                    <small class="opacity-75">Spor salonumuza katılmak için lütfen bilgilerinizi eksiksiz doldurunuz.</small>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" asp-action="Apply">
+                        
+                        <h5 class="text-success mb-3 border-bottom pb-2">Kişisel Bilgiler</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label fw-bold">Adınız</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="Örn: Ahmet" />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label fw-bold">Soyadınız</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Örn: Yılmaz" />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-bold">Email Adresi</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="ornek@email.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label fw-bold">Telefon Numarası</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="5XX XXX XX XX" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <label asp-for="Gender" class="form-label fw-bold">Cinsiyet</label>
+                                <div class="input-group">
+                                    <select asp-for="Gender" class="form-select">
+                                        <option value="">Seçiniz</option>
+                                        <option value="Kadın">Kadın</option>
+                                        <option value="Erkek">Erkek</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="Gender" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <h5 class="text-success mt-4 mb-3 border-bottom pb-2">Fiziksel Bilgiler</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="Age" class="form-label fw-bold">Yaş</label>
+                                <select asp-for="Age" class="form-select">
+                                    <option value="">Seçiniz</option>
+                                    @for (int i = 18; i <= 70; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Age" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Length" class="form-label fw-bold">Boy (cm)</label>
+                                <select asp-for="Length" class="form-select">
+                                    <option value="">Seçiniz</option>
+                                    @for (int i = 140; i <= 220; i++)
+                                    {
+                                        <option value="@i">@i cm</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Length" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Weight" class="form-label fw-bold">Kilo (kg)</label>
+                                <select asp-for="Weight" class="form-select">
+                                    <option value="">Seçiniz</option>
+                                    @for (int i = 40; i <= 150; i++)
+                                    {
+                                        <option value="@i">@i kg</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Weight" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <h5 class="text-success mt-4 mb-3 border-bottom pb-2">Sağlık Durumu</h5>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Allergies" class="form-label fw-bold">Alerjiler</label>
+                                <textarea asp-for="Allergies" class="form-control" rows="2" placeholder="Varsa belirtiniz, yoksa boş bırakınız."></textarea>
+                                <span asp-validation-for="Allergies" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="ChronicDiseases" class="form-label fw-bold">Kronik Rahatsızlıklar</label>
+                                <textarea asp-for="ChronicDiseases" class="form-control" rows="2" placeholder="Varsa belirtiniz, yoksa boş bırakınız."></textarea>
+                                <span asp-validation-for="ChronicDiseases" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="PhysicalDisability" class="form-label fw-bold">Fiziksel Engel Durumu</label>
+                                <textarea asp-for="PhysicalDisability" class="form-control" rows="2" placeholder="Varsa belirtiniz, yoksa boş bırakınız."></textarea>
+                                <span asp-validation-for="PhysicalDisability" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4 pt-3 border-top">
+                            <a class="btn btn-outline-secondary px-4" asp-controller="Home" asp-action="Index">İptal</a>
+                            
+                            <button type="submit" class="btn btn-success px-5 btn-lg shadow-sm">Başvuruyu Tamamla</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
