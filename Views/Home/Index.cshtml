@@ -1,10 +1,53 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Hemen Kayıt Ol</h1>
-    <p>
-    <a asp-controller="Gym" asp-action="Apply" class="btn btn-primary btn-lg">Kayıt Ol</a>
-    </p>
+<!-- Hero Section -->
+<div class="hero-section text-white p-5 rounded-3 mb-5 position-relative overflow-hidden">
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+    <div class="position-relative z-1">
+        <h1 class="display-3 fw-bold mb-3 hero-title">Hedeflerine Ulaş</h1>
+        <p class="lead mb-4 fs-4 hero-subtitle">Profesyonel eğitmenlerimizle hayalindeki vücuda kavuş.</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a asp-controller="Gym" asp-action="Apply" class="btn btn-primary btn-lg px-5 gap-3 fw-bold rounded-pill">Hemen Başvur</a>
+            <a asp-controller="Trainer" asp-action="Index" class="btn btn-outline-light btn-lg px-5 rounded-pill">Eğitmenleri Gör</a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-effect">
+            <div class="card-body text-center p-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <h3 class="fs-2">Uzman Eğitmenler</h3>
+                <p>Alanında uzman ve sertifikalı eğitmenlerle çalışarak en iyi sonuçları alın.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-effect">
+            <div class="card-body text-center p-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-success bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <h3 class="fs-2">Esnek Program</h3>
+                <p>Size ve yaşam tarzınıza en uygun antrenman programlarını birlikte oluşturalım.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-effect">
+            <div class="card-body text-center p-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h3 class="fs-2">Hızlı Sonuç</h3>
+                <p>Bilimsel temelli antrenman metotlarıyla hedeflerinize en kısa sürede ulaşın.</p>
+            </div>
+        </div>
+    </div>
 </div>

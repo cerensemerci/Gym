@@ -1,0 +1,200 @@
+@model IEnumerable<Basics.Models.Trainer>
+
+@{
+    ViewData["Title"] = "Eğitmenlerimiz";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-white mb-3">Uzman Eğitmen Kadromuz</h1>
+        <p class="lead text-secondary">Hedeflerinize ulaşmanız için yanınızdayız.</p>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var trainer in Model)
+        {
+            <div class="col-md-4">
+                <div class="card bg-dark border-secondary h-100 shadow-sm trainer-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                <i class="bi bi-person-badge text-primary fs-3"></i>
+                            </div>
+                            <div>
+                                <h4 class="card-title mb-0 text-white">@trainer.FullName</h4>
+                                <span class="badge bg-secondary">@trainer.Specialty</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="text-secondary small text-uppercase fw-bold mb-2">Uzmanlıklar</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var service in trainer.Services)
+                                {
+                                    <span class="badge border border-secondary text-secondary">@service.Name</span>
+                                }
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary w-100 py-2 rounded-pill fw-bold mt-auto"
+                            data-bs-toggle="modal" data-bs-target="#bookingModal" data-trainer-id="@trainer.TrainerID"
+                            data-trainer-name="@trainer.FullName">
+                            <i class="bi bi-calendar-check me-2"></i>Randevu Al
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Randevu Takvimi - <span id="modalTrainerName"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="bookingCalendar" class="p-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="slotDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white border-secondary shadow-lg">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Randevu Detayları</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="slotInfo" class="mb-4"></p>
+                <form id="bookingForm">
+                    <input type="hidden" id="availabilityId" value="" />
+                    <div class="mb-3">
+                        <label class="form-label">Hizmet Seçiniz</label>
+                        <select class="form-select bg-dark text-white border-secondary" id="serviceSelect" required>
+                            <!-- Services will be loaded dynamically -->
+                        </select>
+                    </div>
+                    <div id="priceInfo" class="alert alert-info py-2 small" style="display:none;"></div>
+                </form>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary px-4" id="confirmBooking">Randevu Oluştur</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/tr.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var bookingModal = document.getElementById('bookingModal');
+            var slotDetailModal = new bootstrap.Modal(document.getElementById('slotDetailModal'));
+            var calendar;
+
+            bookingModal.addEventListener('shown.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var trainerId = button.getAttribute('data-trainer-id');
+                var trainerName = button.getAttribute('data-trainer-name');
+                document.getElementById('modalTrainerName').textContent = trainerName;
+
+                var calendarEl = document.getElementById('bookingCalendar');
+                if (calendar) { calendar.destroy(); }
+
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'timeGridWeek',
+                    locale: 'tr',
+                    headerToolbar: { left: 'prev,next today', center: 'title', right: 'timeGridWeek,timeGridDay' },
+                    slotMinTime: '08:00:00',
+                    slotMaxTime: '22:00:00',
+                    events: {
+                        url: '/Trainer/GetTrainerAvailabilities',
+                        extraParams: { trainerId: trainerId }
+                    },
+                    eventClick: function (info) {
+                        if (info.event.extendedProps.status === 'Available') {
+                            showSlotDetails(info.event, trainerId);
+                        } else {
+                            alert('Bu saat dilimi dolu veya kapalı.');
+                        }
+                    }
+                });
+                calendar.render();
+            });
+
+            function showSlotDetails(event, trainerId) {
+                document.getElementById('availabilityId').value = event.id;
+                document.getElementById('slotInfo').innerHTML = `<strong>Tarih:</strong> ${event.start.toLocaleDateString('tr-TR')}<br><strong>Saat:</strong> ${event.start.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} - ${event.end.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+
+                // Fetch trainer services
+                fetch('/Trainer/GetTrainerServices?id=' + trainerId)
+                    .then(r => r.json())
+                    .then(services => {
+                        var select = document.getElementById('serviceSelect');
+                        select.innerHTML = '<option value="">Hizmet seçiniz...</option>';
+                        services.forEach(s => {
+                            var opt = document.createElement('option');
+                            opt.value = s.id;
+                            opt.textContent = `${s.name} (${s.price} TL)`;
+                            opt.dataset.price = s.price;
+                            select.appendChild(opt);
+                        });
+                        slotDetailModal.show();
+                    });
+            }
+
+            document.getElementById('serviceSelect').addEventListener('change', function () {
+                var info = document.getElementById('priceInfo');
+                if (this.value) {
+                    var selected = this.options[this.selectedIndex];
+                    info.textContent = "Seçilen hizmet ücreti: " + selected.dataset.price + " TL";
+                    info.style.display = 'block';
+                } else {
+                    info.style.display = 'none';
+                }
+            });
+
+            document.getElementById('confirmBooking').addEventListener('click', function () {
+                var availId = document.getElementById('availabilityId').value;
+                var serviceId = document.getElementById('serviceSelect').value;
+
+                if (!serviceId) {
+                    alert('Lütfen bir hizmet seçiniz.');
+                    return;
+                }
+
+                fetch('/Trainer/BookAppointment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ availabilityId: parseInt(availId), serviceId: parseInt(serviceId) })
+                })
+                    .then(r => r.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Randevu talebiniz alındı. Admin onayı bekleniyor.');
+                            slotDetailModal.hide();
+                            calendar.refetchEvents();
+                        } else {
+                            alert('Hata: ' + result.message);
+                        }
+                    });
+            });
+        });
+    </script>
+}

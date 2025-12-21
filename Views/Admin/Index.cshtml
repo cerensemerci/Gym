@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Admin Paneli";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <h1>Admin Paneli</h1>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Eğitmenler</h5>
+                    <p class="card-text">Eğitmenleri yönetin ve takvimlerini düzenleyin.</p>
+                    <a asp-action="Trainers" class="btn btn-light">Git</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Personel</h5>
+                    <p class="card-text">Personel ve üyeleri yönetin.</p>
+                    <a asp-action="Employees" class="btn btn-light">Git</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Kullanıcılar</h5>
+                    <p class="card-text">Sistem kullanıcılarını yönetin.</p>
+                    <a asp-action="Users" class="btn btn-light">Git</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

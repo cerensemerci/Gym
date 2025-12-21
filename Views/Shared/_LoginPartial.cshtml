@@ -1,0 +1,33 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav ms-auto">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Admin" asp-action="Index" title="Manage">Merhaba @User.Identity?.Name!</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" asp-controller="Account" asp-action="MyAppointments">
+                <i class="bi bi-calendar4-event me-1 text-primary"></i>Randevularım
+            </a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link text-danger border-0"><i
+                        class="bi bi-box-arrow-right me-1"></i>Çıkış Yap</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-primary text-white ms-2 px-3 rounded-pill" asp-controller="Account"
+                asp-action="Login">Giriş Yap</a>
+        </li>
+    }
+</ul>

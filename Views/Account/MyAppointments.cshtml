@@ -1,0 +1,87 @@
+@model IEnumerable<Basics.Models.TrainerAvailability>
+
+@{
+    ViewData["Title"] = "Randevularım";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="text-white fw-bold">Randevularım</h2>
+        <p class="text-secondary">Aldığınız randevu taleplerini ve durumlarını buradan takip edebilirsiniz.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card bg-dark border-secondary shadow-lg">
+                <div class="card-body p-0">
+                    <table class="table table-dark table-hover mb-0 align-middle">
+                        <thead class="bg-primary bg-opacity-10">
+                            <tr>
+                                <th class="ps-4">Eğitmen</th>
+                                <th>Hizmet</th>
+                                <th>Tarih</th>
+                                <th>Saat</th>
+                                <th>Ücret</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center py-5 text-secondary italic">
+                                        Henüz bir randevunuz bulunmamaktadır.
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle fs-4 me-3 text-primary"></i>
+                                            <div>
+                                                <div class="fw-bold">@item.Trainer?.FullName</div>
+                                                <div class="small text-secondary">@item.Trainer?.Specialty</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="badge border border-secondary text-secondary">@item.Service?.Name</span>
+                                    </td>
+                                    <td>@item.StartTime.ToShortDateString()</td>
+                                    <td>@item.StartTime.ToShortTimeString() - @item.EndTime.ToShortTimeString()</td>
+                                    <td class="fw-bold">@item.Price.ToString("C2")</td>
+                                    <td>
+                                        @if (item.Status == "Booked")
+                                        {
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-clock-history me-1"></i>
+                                                Onay Bekliyor</span>
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>
+                                                Onaylandı</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-center">
+                <a asp-controller="Trainer" asp-action="Index" class="btn btn-outline-primary px-4 rounded-pill">
+                    <i class="bi bi-plus-lg me-2"></i>Yeni Randevu Al
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

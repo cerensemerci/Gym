@@ -18,7 +18,7 @@ namespace Basics.Models
 
         
         [Display(Name = "Ad Soyad")]
-        public string FullName => $"{FirstName} {LastName.ToUpper()}";
+        public string FullName => $"{FirstName} {(LastName ?? "").ToUpper()}";
 
         [Required(ErrorMessage = "E-posta adresi zorunludur.")]
         [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
