@@ -18,11 +18,12 @@ namespace Basics.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Apply([FromForm] Employee model)
-        {   
-            
-            Repository repo = new Repository();
-            repo.AddEmployee(model);
-            return View("Feedback", model);
+        {
+            if (ModelState.IsValid)
+            {
+                return View("Feedback", model);
+            }
+            return View("Apply", model);
         }
     }
 }

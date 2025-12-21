@@ -1,17 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Basics.Models
 {
-    public class Repository
+    public class RepositoryContext : DbContext
     {
-        private static List<Employee> employees = new List<Employee>();
-
-        public void AddEmployee(Employee employee)
+        public DbSet<Employee> Employees { get; set; }
+        public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
-            employees.Add(employee);
-        }
-
-        public IEnumerable<Employee> GetAllEmployees()
-        {
-            return employees;
+            
         }
     }
 }
